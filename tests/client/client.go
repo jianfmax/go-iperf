@@ -2,15 +2,17 @@ package main
 
 import (
 	"fmt"
+	"github.com/BGrewell/go-conversions"
 	"github.com/jianfmax/go-iperf"
 	"os"
+	"time"
 )
 
 func main() {
 
 	//includeServer := true
 	proto := "tcp"
-	runTime := 20
+	runTime := 5
 	omitSec := 0
 	//length := "65500"
 
@@ -26,9 +28,16 @@ func main() {
 	c.SetBandwidth("10M")
 	reports := c.SetModeLive()
 
+	stopT := time.NewTimer(15 * time.Second)
+
 	go func() {
-		for report := range reports {
-			fmt.Println(report.String())
+		for {
+			select {
+			case report := <-reports:
+				fmt.Println(report.String())
+			case <-stopT.C:
+				break
+			}
 		}
 	}()
 
@@ -38,6 +47,9 @@ func main() {
 		os.Exit(-1)
 	}
 
+	//time.Sleep(5 * time.Second)
+	//c.Stop()
+
 	// Method 1: Wait for the test to finish by pulling from the 'Done' channel which will block until something is put in or it's closed
 	<-c.Done
 
@@ -46,16 +58,16 @@ func main() {
 	//	time.Sleep(100 * time.Millisecond)
 	//}
 
-	//if c.Report().Error != "" {
-	//	fmt.Println(c.Report().Error)
-	//} else {
-	//	for _, entry := range c.Report().End.Streams {
-	//		fmt.Println(entry.String())
-	//	}
-	//	for _, entry := range c.Report().ServerOutputJson.End.Streams {
-	//		fmt.Println(entry.String())
-	//	}
-	//	fmt.Printf("DL Rate: %s\n", conversions.IntBitRateToString(int64(c.Report().End.SumReceived.BitsPerSecond)))
-	//	fmt.Printf("UL Rate: %s\n", conversions.IntBitRateToString(int64(c.Report().End.SumSent.BitsPerSecond)))
-	//}
+	if c.Report() != nil && c.Report().Error != "" {
+		fmt.Println(c.Report().Error)
+	} else if c.Report() != nil {
+		for _, entry := range c.Report().End.Streams {
+			fmt.Println(entry.String())
+		}
+		for _, entry := range c.Report().ServerOutputJson.End.Streams {
+			fmt.Println(entry.String())
+		}
+		fmt.Printf("DL Rate: %s\n", conversions.IntBitRateToString(int64(c.Report().End.SumReceived.BitsPerSecond)))
+		fmt.Printf("UL Rate: %s\n", conversions.IntBitRateToString(int64(c.Report().End.SumSent.BitsPerSecond)))
+	}
 }
