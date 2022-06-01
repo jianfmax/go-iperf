@@ -8,15 +8,15 @@ import (
 	"sync"
 	"time"
 
-	api "github.com/BGrewell/go-iperf/api/go"
+	api "github.com/jianfmax/go-iperf/api/go"
 	"google.golang.org/grpc"
 )
 
 func NewController(port int) (controller *Controller, err error) {
 	c := &Controller{
-		Port:    port,
-		clients: make(map[string]*Client),
-		servers: make(map[string]*Server),
+		Port:       port,
+		clients:    make(map[string]*Client),
+		servers:    make(map[string]*Server),
 		clientLock: sync.Mutex{},
 		serverLock: sync.Mutex{},
 	}
@@ -31,12 +31,12 @@ func NewController(port int) (controller *Controller, err error) {
 // client. This allows the entire iperf setup and session to be performed from the client side.
 type Controller struct {
 	api.UnimplementedCommandServer
-	Port int
-	cmdClient api.CommandClient
+	Port       int
+	cmdClient  api.CommandClient
 	clientLock sync.Mutex
 	serverLock sync.Mutex
-	clients map[string]*Client
-	servers map[string]*Server
+	clients    map[string]*Client
+	servers    map[string]*Server
 }
 
 // StartServer is the handler for the gRPC function StartServer()
@@ -54,12 +54,12 @@ func (c *Controller) GrpcRequestServer(context.Context, *api.StartServerRequest)
 	c.serverLock.Lock()
 	c.servers[srv.Id] = srv
 	c.serverLock.Unlock()
-	
+
 	reply := &api.StartServerResponse{
 		Id:         srv.Id,
 		ListenPort: int32(srv.Port()),
 	}
-	
+
 	return reply, nil
 }
 
@@ -112,12 +112,12 @@ func (c *Controller) NewClient(serverAddr string) (client *Client, err error) {
 		return nil, err
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), 2 * time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
 	defer cancel()
 	reply, err := grpc.GrpcRequestServer(ctx, &api.StartServerRequest{})
 	srvPort := int(reply.ListenPort)
 	fmt.Printf("[!] server is listening on port %d\n", srvPort)
-	
+
 	cli := NewClient(serverAddr)
 	cli.SetPort(srvPort)
 	c.clientLock.Lock()

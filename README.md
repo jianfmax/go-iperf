@@ -1,6 +1,10 @@
 # go-iperf
 A Go based wrapper around iperf3
 
+```shell
+go get -u github.com/jianfmax/go-iperf
+```
+
 ## Basic Usage
 
 basic client setup

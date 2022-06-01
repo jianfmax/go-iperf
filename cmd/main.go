@@ -1,12 +1,9 @@
 package main
 
 import (
-//"fmt"
-   "github.com/BGrewell/go-conversions"
-//"github.com/BGrewell/go-iperf"
-//"time"
 	"fmt"
-	"github.com/BGrewell/go-iperf"
+	"github.com/BGrewell/go-conversions"
+	"github.com/jianfmax/go-iperf"
 	"time"
 )
 
@@ -37,7 +34,6 @@ func main() {
 
 	fmt.Printf("Client exit code: %d\n", *c.ExitCode())
 	fmt.Printf("Server exit code: %d\n", *s.ExitCode)
-	iperf.Cleanup()
 	if c.Report().Error != "" {
 		fmt.Println(c.Report().Error)
 	} else {

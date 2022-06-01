@@ -14,14 +14,14 @@ import (
 )
 
 func NewClient(host string) *Client {
-	json := true
+	jsonBool := true
 	proto := Protocol(PROTO_TCP)
 	time := 10
 	length := "128KB"
 	streams := 1
 	c := &Client{
 		Options: &ClientOptions{
-			JSON:    &json,
+			JSON:    &jsonBool,
 			Proto:   &proto,
 			TimeSec: &time,
 			Length:  &length,
@@ -532,6 +532,8 @@ func (c *Client) start() (pid int, err error) {
 				LogFile:          c.reportingFile,
 			}
 			reporter.Start()
+			//_, _ = ioutil.ReadAll(c.outputStream)
+			read <- true
 		} else {
 			if c.Debug {
 				fmt.Println("reading output")

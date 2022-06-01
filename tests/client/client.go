@@ -2,27 +2,28 @@ package main
 
 import (
 	"fmt"
-	"github.com/BGrewell/go-iperf"
+	"github.com/jianfmax/go-iperf"
 	"os"
 )
 
 func main() {
 
-	includeServer := true
+	//includeServer := true
 	proto := "tcp"
-	runTime := 10
+	runTime := 20
 	omitSec := 0
-	length := "65500"
+	//length := "65500"
 
-	c := iperf.NewClient("10.254.100.100")
-	c.SetIncludeServer(includeServer)
+	c := iperf.NewClient("127.0.0.1")
+	//c.SetIncludeServer(includeServer)
 	c.SetTimeSec(runTime)
 	c.SetOmitSec(omitSec)
 	c.SetProto((iperf.Protocol)(proto))
-	c.SetLength(length)
+	//c.SetLength(length)
 	c.SetJSON(false)
 	c.SetIncludeServer(false)
-	c.SetStreams(2)
+	//c.SetStreams(2)
+	c.SetBandwidth("10M")
 	reports := c.SetModeLive()
 
 	go func() {
