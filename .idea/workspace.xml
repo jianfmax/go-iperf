@@ -4,8 +4,14 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fc2840de-29dc-4fca-8e0e-a283562f60ca" name="Default Changelist" comment="修改了逻辑，保证客户端可以完成后退出。">
+    <list default="true" id="fc2840de-29dc-4fca-8e0e-a283562f60ca" name="Default Changelist" comment="add line output">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client.go" beforeDir="false" afterPath="$PROJECT_DIR$/client.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporter.go" beforeDir="false" afterPath="$PROJECT_DIR$/reporter.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporter_darwin.go" beforeDir="false" afterPath="$PROJECT_DIR$/reporter_darwin.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporter_linux.go" beforeDir="false" afterPath="$PROJECT_DIR$/reporter_linux.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporter_windows.go" beforeDir="false" afterPath="$PROJECT_DIR$/reporter_windows.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/client/client.go" beforeDir="false" afterPath="$PROJECT_DIR$/tests/client/client.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -23,6 +29,11 @@
   </component>
   <component name="GOROOT" url="file:///usr/local/go" />
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="feature-iperf3_3.11" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GoLibraries">
@@ -36,25 +47,25 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.go.format.on.save.advertiser.fired": "true",
-    "RunOnceActivity.go.formatter.settings.were.checked": "true",
-    "RunOnceActivity.go.migrated.go.modules.settings": "true",
-    "RunOnceActivity.go.modules.go.list.on.any.changes.was.set": "true",
-    "RunOnceActivity.go.watchers.conflict.with.on.save.actions.check.performed": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "go.import.settings.migrated": "true",
-    "go.sdk.automatically.set": "true",
-    "last_opened_file_path": "/Users/jfma",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "http.proxy"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.go.format.on.save.advertiser.fired&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.modules.go.list.on.any.changes.was.set&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.watchers.conflict.with.on.save.actions.check.performed&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
+    &quot;go.sdk.automatically.set&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/jfma&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;http.proxy&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\BGrewell\source\repos\go-iperf\tests\server" />
@@ -66,13 +77,22 @@
     </key>
   </component>
   <component name="RunManager" selected="Go 构建.go build github.com/jianfmax/go-iperf/tests/client">
-    <configuration name="go build github.com/BGrewell/go-iperf/tests/client" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+    <configuration default="true" type="GoApplicationRunConfiguration" factoryName="Go Application">
       <module name="go-iperf" />
       <working_directory value="$PROJECT_DIR$" />
       <kind value="PACKAGE" />
-      <package value="github.com/BGrewell/go-iperf/tests/client" />
+      <package value="github.com/jianfmax/go-iperf" />
       <directory value="$PROJECT_DIR$" />
-      <filePath value="$PROJECT_DIR$/tests/client/client.go" />
+      <filePath value="$PROJECT_DIR$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="go build client.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+      <module name="go-iperf" />
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="FILE" />
+      <package value="github.com/jianfmax/go-iperf" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$/client.go" />
       <method v="2" />
     </configuration>
     <configuration name="go build github.com/BGrewell/go-iperf/tests/controller" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
@@ -111,9 +131,23 @@
       <filePath value="$PROJECT_DIR$/tests/client/client.go" />
       <method v="2" />
     </configuration>
+    <configuration default="true" type="GoTestRunConfiguration" factoryName="Go Test">
+      <module name="go-iperf" />
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="DIRECTORY" />
+      <package value="github.com/jianfmax/go-iperf" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Go 构建.go build github.com/jianfmax/go-iperf/tests/client" />
+        <item itemvalue="Go 构建.go build client.go" />
+        <item itemvalue="Go 构建.go build github.com/BGrewell/go-iperf/tests/server" />
+        <item itemvalue="Go 构建.go build github.com/BGrewell/go-iperf/tests/extract" />
+        <item itemvalue="Go 构建.go build github.com/BGrewell/go-iperf/tests/controller" />
       </list>
     </recent_temporary>
   </component>
@@ -144,7 +178,9 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="修改了逻辑，保证客户端可以完成后退出。" />
-    <option name="LAST_COMMIT_MESSAGE" value="修改了逻辑，保证客户端可以完成后退出。" />
+    <MESSAGE value="tmp" />
+    <MESSAGE value="add line output" />
+    <option name="LAST_COMMIT_MESSAGE" value="add line output" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

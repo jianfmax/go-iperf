@@ -5,38 +5,40 @@ import (
 	"github.com/BGrewell/go-conversions"
 	"github.com/jianfmax/go-iperf"
 	"os"
-	"time"
 )
 
 func main() {
 
 	//includeServer := true
-	proto := "tcp"
-	runTime := 5
-	omitSec := 0
-	//length := "65500"
+	proto := "udp"
+	runTime := 10
+	//omitSec := 0
+	length := "1460"
 
 	c := iperf.NewClient("127.0.0.1")
 	//c.SetIncludeServer(includeServer)
 	c.SetTimeSec(runTime)
-	c.SetOmitSec(omitSec)
+	//c.SetOmitSec(omitSec)
 	c.SetProto((iperf.Protocol)(proto))
-	//c.SetLength(length)
-	c.SetJSON(false)
+	c.SetLength(length)
+	//c.SetJSON(false)
 	c.SetIncludeServer(false)
 	//c.SetStreams(2)
 	c.SetBandwidth("10M")
-	reports := c.SetModeLive()
+	reports, lines := c.SetModeLive()
 
-	stopT := time.NewTimer(15 * time.Second)
+	//stopT := time.NewTimer(15 * time.Second)
 
 	go func() {
 		for {
 			select {
-			case report := <-reports:
-				fmt.Println(report.String())
-			case <-stopT.C:
-				break
+			case <-reports:
+			//case report := <-reports:
+			//	fmt.Println(report.String())
+			case line := <-lines:
+				fmt.Println(line)
+				//case <-stopT.C:
+				//	break
 			}
 		}
 	}()

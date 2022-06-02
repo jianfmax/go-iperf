@@ -63,6 +63,7 @@ func (r *Reporter) runLogProcessor() {
 			if line == nil {
 				continue
 			}
+			r.LineChannel <- line.Text
 			if len(line.Text) > 5 {
 				id := line.Text[1:4]
 				stream, err := strconv.Atoi(strings.TrimSpace(id))

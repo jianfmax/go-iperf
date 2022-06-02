@@ -7,6 +7,7 @@ import (
 
 type Reporter struct {
 	ReportingChannel chan *StreamIntervalReport
+	LineChannel      chan string
 	LogFile          string
 	running          bool
 	tailer           *tail.Tail

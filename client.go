@@ -17,15 +17,11 @@ func NewClient(host string) *Client {
 	jsonBool := true
 	proto := Protocol(PROTO_TCP)
 	time := 10
-	length := "128KB"
-	streams := 1
 	c := &Client{
 		Options: &ClientOptions{
 			JSON:    &jsonBool,
 			Proto:   &proto,
 			TimeSec: &time,
-			Length:  &length,
-			Streams: &streams,
 			Host:    &host,
 		},
 	}
@@ -62,21 +58,22 @@ type ClientOptions struct {
 }
 
 type Client struct {
-	Id            string         `json:"id" yaml:"id" xml:"id"`
-	Running       bool           `json:"running" yaml:"running" xml:"running"`
-	Done          chan bool      `json:"-" yaml:"-" xml:"-"`
-	Options       *ClientOptions `json:"options" yaml:"options" xml:"options"`
-	Debug         bool           `json:"-" yaml:"-" xml:"-"`
-	StdOut        bool           `json:"-" yaml:"-" xml:"-"`
-	exitCode      *int
-	report        *TestReport
-	outputStream  io.ReadCloser
-	errorStream   io.ReadCloser
-	cancel        context.CancelFunc
-	mode          TestMode
-	live          bool
-	reportingChan chan *StreamIntervalReport
-	reportingFile string
+	Id                string         `json:"id" yaml:"id" xml:"id"`
+	Running           bool           `json:"running" yaml:"running" xml:"running"`
+	Done              chan bool      `json:"-" yaml:"-" xml:"-"`
+	Options           *ClientOptions `json:"options" yaml:"options" xml:"options"`
+	Debug             bool           `json:"-" yaml:"-" xml:"-"`
+	StdOut            bool           `json:"-" yaml:"-" xml:"-"`
+	exitCode          *int
+	report            *TestReport
+	outputStream      io.ReadCloser
+	errorStream       io.ReadCloser
+	cancel            context.CancelFunc
+	mode              TestMode
+	live              bool
+	reportingChan     chan *StreamIntervalReport
+	reportingLineChan chan string
+	reportingFile     string
 }
 
 func (c *Client) LoadOptionsJSON(jsonStr string) (err error) {
@@ -475,17 +472,18 @@ func (c *Client) SetModeJson() {
 	c.reportingFile = ""
 }
 
-func (c *Client) SetModeLive() <-chan *StreamIntervalReport {
+func (c *Client) SetModeLive() (<-chan *StreamIntervalReport, <-chan string) {
 	c.SetJSON(false) // having JSON == true will cause reporting to fail
 	c.live = true
 	c.reportingChan = make(chan *StreamIntervalReport, 10000)
+	c.reportingLineChan = make(chan string, 10000)
 	f, err := ioutil.TempFile("", "iperf_")
 	if err != nil {
 		log.Fatalf("failed to create logfile: %v", err)
 	}
 	c.reportingFile = f.Name()
 	c.SetLogFile(c.reportingFile)
-	return c.reportingChan
+	return c.reportingChan, c.reportingLineChan
 }
 
 func (c *Client) Start() (err error) {
@@ -529,6 +527,7 @@ func (c *Client) start() (pid int, err error) {
 		if c.live {
 			reporter = &Reporter{
 				ReportingChannel: c.reportingChan,
+				LineChannel:      c.reportingLineChan,
 				LogFile:          c.reportingFile,
 			}
 			reporter.Start()
