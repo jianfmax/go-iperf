@@ -7,6 +7,7 @@ import (
 	"github.com/google/uuid"
 	"io"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -40,6 +41,7 @@ type ServerOptions struct {
 type Server struct {
 	Id           string             `json:"id" yaml:"id" xml:"id"`
 	Running      bool               `json:"running" yaml:"running" xml:"running"`
+	RunningLock  sync.Mutex         `json:"-" yaml:"-" xml:"-"`
 	Options      *ServerOptions     `json:"-" yaml:"-" xml:"-"`
 	ExitCode     *int               `json:"exit_code" yaml:"exit_code" xml:"exit_code"`
 	Debug        bool               `json:"-" yaml:"-" xml:"-"`
@@ -174,7 +176,9 @@ func (s *Server) start() (pid int, err error) {
 	if err != nil {
 		return -1, err
 	}
+	s.RunningLock.Lock()
 	s.Running = true
+	s.RunningLock.Unlock()
 
 	go func() {
 		ds := DebugScanner{Silent: !s.StdOut}
@@ -188,12 +192,16 @@ func (s *Server) start() (pid int, err error) {
 	go func() {
 		exitCode := <-exit
 		s.ExitCode = &exitCode
+		s.RunningLock.Lock()
 		s.Running = false
+		s.RunningLock.Unlock()
 	}()
-	return pid,nil
+	return pid, nil
 }
 
 func (s *Server) Stop() {
+	s.RunningLock.Lock()
+	defer s.RunningLock.Unlock()
 	if s.Running && s.cancel != nil {
 		s.cancel()
 		time.Sleep(100 * time.Millisecond)

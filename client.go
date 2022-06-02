@@ -11,6 +11,7 @@ import (
 	"log"
 	"os"
 	"strings"
+	"sync"
 )
 
 func NewClient(host string) *Client {
@@ -60,6 +61,7 @@ type ClientOptions struct {
 type Client struct {
 	Id                string         `json:"id" yaml:"id" xml:"id"`
 	Running           bool           `json:"running" yaml:"running" xml:"running"`
+	RunningLock       sync.Mutex     `json:"-" yaml:"-" xml:"-"`
 	Done              chan bool      `json:"-" yaml:"-" xml:"-"`
 	Options           *ClientOptions `json:"options" yaml:"options" xml:"options"`
 	Debug             bool           `json:"-" yaml:"-" xml:"-"`
@@ -511,7 +513,9 @@ func (c *Client) start() (pid int, err error) {
 	if err != nil {
 		return -1, err
 	}
+	c.RunningLock.Lock()
 	c.Running = true
+	c.RunningLock.Unlock()
 
 	//go func() {
 	//	ds := DebugScanner{Silent: !c.StdOut}
@@ -557,7 +561,9 @@ func (c *Client) start() (pid int, err error) {
 		}
 		exitCode := <-exit
 		c.exitCode = &exitCode
+		c.RunningLock.Lock()
 		c.Running = false
+		c.RunningLock.Unlock()
 		c.Done <- true
 		if reporter != nil {
 			reporter.Stop()
@@ -567,6 +573,8 @@ func (c *Client) start() (pid int, err error) {
 }
 
 func (c *Client) Stop() {
+	c.RunningLock.Lock()
+	defer c.RunningLock.Unlock()
 	if c.Running && c.cancel != nil {
 		c.cancel()
 		os.Remove(c.reportingFile)
